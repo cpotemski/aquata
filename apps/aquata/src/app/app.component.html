@@ -1,8 +1,6 @@
-<div style="text-align:center">
-  <h1>Welcome to aquata!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png"
-  />
-</div>
-<div>Message: {{ hello$ | async | json }}</div>
+<h3>Moin :</h3>
+<input type="text" [(ngModel)]="email" placeholder="E-Mail" />
+<input type="text" [(ngModel)]="password" placeholder="Password" />
+<button (click)="login()">Login</button>
+
+<button (click)="getUsers()">Fetch Users</button>

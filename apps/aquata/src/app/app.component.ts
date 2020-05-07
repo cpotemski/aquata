@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@aquata/api-interfaces';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { User, LoginResponse } from '@aquata/api-interfaces';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json'
+  })
+};
 
 @Component({
   selector: 'aquata-root',
@@ -8,6 +14,33 @@ import { Message } from '@aquata/api-interfaces';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
+  email = 'c.potemski@gmail.com';
+  password = 'password';
+
   constructor(private http: HttpClient) {}
+
+  login() {
+    this.http
+      .post<LoginResponse>(
+        '/api/auth/login',
+        {
+          email: this.email,
+          password: this.password
+        },
+        httpOptions
+      )
+      .subscribe(({ access_token }) =>
+        localStorage.setItem('token', access_token)
+      );
+  }
+
+  getUsers() {
+    this.http
+      .get<User[]>('/api/user', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+      .subscribe((users: User[]) => {
+        console.log('users', users);
+      });
+  }
 }
