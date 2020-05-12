@@ -1,50 +1,47 @@
 import { Module } from '@nestjs/common';
-import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { UserModule } from '../user/user.module';
-import { Connection, Repository } from 'typeorm';
-import { Station } from '../station/station.entity';
+import { RegistrationModule } from '../registration/registration.module';
+import { RegistrationService } from '../registration/registration.service';
+import { StationService } from '../station/station.service';
+import { StationModule } from '../station/station.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [RegistrationModule, UserModule, StationModule],
   providers: [],
   exports: []
 })
 export class SeedModule {
-  private userRepository: Repository<User>;
-  private stationRepository: Repository<Station>;
+
   constructor(
+    private readonly registrationService: RegistrationService,
     private readonly userService: UserService,
-    private readonly connection: Connection,
+    private readonly stationService: StationService,
   ) {
-    this.userRepository = connection.getRepository(User);
-    this.stationRepository = connection.getRepository(Station);
-    if(process.env.STAGE === 'local') {
-      this.localSeed();
-    }
     this.seed();
-    console.log('seed complete');
+  }
+
+  async seed() {
+    if(process.env.STAGE === 'local') {
+      await this.localSeed();
+    }
+
+    await this.deleteAll();
+
+    await this.registrationService.register({
+      email: 'c.potemski@gmail.com',
+      password: process.env.ADMIN_PASSWORD,
+      userName: 'LordArmageddon',
+      stationName: 'Hamburg',
+    });
   }
 
   async localSeed() {
 
   }
 
-  async seed() {
-    await this.userRepository.delete({});
-    const arma = await this.userService.create({
-      email: 'c.potemski@gmail.com',
-      password: process.env.ADMIN_PASSWORD,
-      name: 'LordArmageddon'
-    });
-    await this.stationRepository.delete({})
-    await this.stationRepository.create({
-      name: 'Hamburg',
-      user: arma,
-      coordinates: {
-        x: 1,
-        y: 1
-      }
-    })
+  async deleteAll() {
+    await this.userService.deleteAll();
+    await this.stationService.deleteAll();
   }
 }

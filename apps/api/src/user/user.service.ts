@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
 import { CreateUserDto } from '@aquata/api-interfaces';
-import { Connection, Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
-  private userRepository: Repository<User>;
   constructor(
-    private readonly connection: Connection
-  ) {
-    this.userRepository = connection.getRepository(User);
-  }
-  findOne(email: string): Promise<User | undefined> {
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  findByEmail(email: string): Promise<User | undefined> {
     return this.userRepository.findOne({ email });
   }
 
@@ -19,13 +19,21 @@ export class UserService {
     return this.userRepository.findOne({ id });
   }
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  async create(data: CreateUserDto): Promise<User> {
+    const existingUser = await this.userRepository.findOne({email: data.email});
+    if(existingUser) {
+      throw Error('A user with this email already exists!');
+    }
+
+    const user = this.userRepository.create(data);
+    return this.userRepository.save(user);
   }
 
-  async create(data: CreateUserDto): Promise<User> {
-    const user = this.userRepository.create(data);
-    await this.userRepository.save(user);
-    return user;
+  getUserList(): Promise<User[]> {
+    return this.userRepository.find({ select: [ 'id', 'name' ]})
+  }
+
+  async deleteAll() {
+    return this.userRepository.delete({});
   }
 }

@@ -16,7 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@aquata/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@aquata/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@aquata/constants": ["libs/constants/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

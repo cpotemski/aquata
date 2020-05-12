@@ -20,6 +20,18 @@ export class CreateUserDto {
   name: string;
 }
 
+export class CreateStationDto {
+  user: User;
+  name: string;
+}
+
+export class RegistrationDto {
+  email: string;
+  password: string;
+  userName: string;
+  stationName: string;
+}
+
 export class News {
   id: string;
   userId: string;
@@ -34,12 +46,24 @@ enum NewsTypeEnum {
   SCAN= 'SCAN',
 }
 
-export class Station {
-  id: string;
-  userId: string;
-  name: String;
+export class Coordinates {
   x: number;
   y: number;
+}
+
+export class Resources {
+  aluminium: number;
+  steel: number;
+  plutonium: number;
+  energy: number;
+}
+
+export class Station {
+  id: string;
+  user: User;
+  name: String;
+  coordinates: Coordinates;
+  resources: Resources;
 }
 
 enum ResourceTypeEnum {

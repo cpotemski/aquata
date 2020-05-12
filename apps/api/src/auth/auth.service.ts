@@ -11,7 +11,7 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     //TODO: bcrypt password
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findByEmail(email);
     if (user && user.password === pass) {
       const { password, ...result } = user;
       return result;
@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   async login({ email }: { email: string }) {
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findByEmail(email);
     const { password, ...userWithoutPassword } = user;
     return {
       access_token: this.jwtService.sign({ id: user.id }),

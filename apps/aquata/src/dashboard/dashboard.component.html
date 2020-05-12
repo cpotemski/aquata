@@ -1,0 +1,4 @@
+<h1>Dashboard</h1>
+
+Stations
+<div *ngFor="let station of stations$ | async">{{station.user.name}} von {{station.name}} ({{station.coordinates.x}}:{{station.coordinates.y}})</div>
