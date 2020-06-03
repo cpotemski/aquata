@@ -5,9 +5,13 @@ import { RegistrationModule } from '../registration/registration.module';
 import { RegistrationService } from '../registration/registration.service';
 import { StationService } from '../station/station.service';
 import { StationModule } from '../station/station.module';
+import { STAGES } from '@aquata/constants';
+import { BuildService } from '../build/build.service';
+import { BuildModule } from '../build/build.module';
+import { BuildOrderType } from '@aquata/api-interfaces';
 
 @Module({
-  imports: [RegistrationModule, UserModule, StationModule],
+  imports: [RegistrationModule, UserModule, StationModule, BuildModule],
   providers: [],
   exports: []
 })
@@ -17,22 +21,29 @@ export class SeedModule {
     private readonly registrationService: RegistrationService,
     private readonly userService: UserService,
     private readonly stationService: StationService,
+    private readonly buildService: BuildService,
   ) {
     this.seed();
   }
 
   async seed() {
-    if(process.env.STAGE === 'local') {
+    if(process.env.STAGE === STAGES.LOCAL) {
       await this.localSeed();
     }
 
     await this.deleteAll();
 
-    await this.registrationService.register({
+    const userId = await this.registrationService.register({
       email: 'c.potemski@gmail.com',
       password: process.env.ADMIN_PASSWORD,
       userName: 'LordArmageddon',
       stationName: 'Hamburg',
+    });
+
+    await this.buildService.create(userId,{
+      type: BuildOrderType.SHIP,
+      what: 'piranha',
+      amount: 1,
     });
   }
 
@@ -41,7 +52,8 @@ export class SeedModule {
   }
 
   async deleteAll() {
-    await this.userService.deleteAll();
     await this.stationService.deleteAll();
+    await this.buildService.deleteAll();
+    await this.userService.deleteAll();
   }
 }

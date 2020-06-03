@@ -1,6 +1,7 @@
-import { Column } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
-export class Resources {
+@Entity({ name: 'resources' })
+export class ResourcesEntity {
   @Column({
     nullable: false,
     default: 1000

@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../helper/base.entity';
 
-@Entity()
-export class User extends BaseEntity {
+@Entity({ name: 'user' })
+export class UserEntity extends BaseEntity {
   @Column()
   email: string;
 

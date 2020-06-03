@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Station, User } from '@aquata/api-interfaces';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { BuildOrder } from '../../../api/src/build/build-order';
 
 const headers = {
   'Content-Type': 'application/json'
@@ -14,6 +15,7 @@ const headers = {
 })
 export class DashboardComponent {
   public stations$: Observable<Station[]>;
+  public buildOrders$: Observable<BuildOrder[]>;
 
   constructor(private http: HttpClient) {
     this.stations$ = this.http
@@ -28,6 +30,23 @@ export class DashboardComponent {
             localStorage.removeItem('token');
           }
           console.log('getStations', err);
+          throw Error('not logged in!');
+
+        })
+      )
+
+    this.buildOrders$ = this.http
+      .get<BuildOrder[]>('/api/build/ship', {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }).pipe(
+        catchError((err: HttpErrorResponse) => {
+          if(err.status === 401) {
+            localStorage.removeItem('token');
+          }
+          console.log('getShipBuildOrders', err);
           throw Error('not logged in!');
 
         })

@@ -1,6 +1,6 @@
 import { Column } from 'typeorm';
 
-export class MapCoordinates {
+export class MapCoordinatesEntity {
   @Column({ nullable: false })
   x: number;
 

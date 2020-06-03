@@ -1,21 +1,21 @@
-import { Entity, Column, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { BaseEntity } from '../helper/base.entity';
-import { User } from '../user/user.entity';
-import { Resources } from '../helper/resources.entity';
-import { MapCoordinates } from '../helper/map-coordinates.entity';
+import { UserEntity } from '../user/user.entity';
+import { ResourcesEntity } from './resources.entity';
+import { MapCoordinatesEntity } from '../helper/map-coordinates.entity';
 
-@Entity()
-export class Station extends BaseEntity {
+@Entity({ name: 'station' })
+export class StationEntity extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToOne(type => User)
+  @OneToOne(type => UserEntity)
   @JoinColumn()
-  user: User;
+  user: UserEntity;
 
-  @Column(type => MapCoordinates)
-  coordinates: MapCoordinates;
+  @Column(type => MapCoordinatesEntity)
+  coordinates: MapCoordinatesEntity;
 
-  @Column(type => Resources)
-  resources: Resources;
+  @Column(type => ResourcesEntity)
+  resources: ResourcesEntity;
 }

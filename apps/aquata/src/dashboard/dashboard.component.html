@@ -2,3 +2,6 @@
 
 Stations
 <div *ngFor="let station of stations$ | async">{{station.user.name}} von {{station.name}} ({{station.coordinates.x}}:{{station.coordinates.y}})</div>
+<br/>
+BuildOrders
+<div *ngFor="let order of buildOrders$ | async">{{order.amount}} {{order.what}} noch {{order.remainingTime}} Ticks verbleibend</div>

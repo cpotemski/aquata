@@ -17,7 +17,9 @@
     "baseUrl": ".",
     "paths": {
       "@aquata/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@aquata/constants": ["libs/constants/src/index.ts"]
+      "@aquata/constants": ["libs/constants/src/index.ts"],
+      "@aquata/ship-data": ["libs/ship-data/src/index.ts"],
+      "@aquata/helper": ["libs/helper/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

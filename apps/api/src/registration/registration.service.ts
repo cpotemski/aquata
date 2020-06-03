@@ -10,7 +10,7 @@ export class RegistrationService {
     private readonly stationService: StationService,
   ) {}
 
-  async register(data: RegistrationDto) {
+  async register(data: RegistrationDto): Promise<string> {
     const user = await this.userService.create({
       email: data.email,
       password: data.password,
@@ -21,5 +21,7 @@ export class RegistrationService {
       user,
       name: data.stationName
     });
+
+    return user.id;
   }
 }

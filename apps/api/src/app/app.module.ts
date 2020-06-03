@@ -7,23 +7,28 @@ import { UserModule } from '../user/user.module';
 import { StationModule } from '../station/station.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SeedModule } from '../seed/seed.module';
+import { TickModule } from '../tick/tick.module';
+import { BuildModule } from '../build/build.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DB_CONNECTION_STRING,
       synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
-      autoLoadEntities: true,
+      autoLoadEntities: true
     }),
     AuthModule,
     UserModule,
     StationModule,
-    SeedModule
+    SeedModule,
+    BuildModule,
+    TickModule
   ],
   controllers: [AppController]
 })
-export class AppModule {}
+export class AppModule {
+}
