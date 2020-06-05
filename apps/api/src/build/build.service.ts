@@ -39,7 +39,7 @@ export class BuildService {
     const duration = 10;
 
     if (await this.resourceService.hasEnoughResources(userId, multiplyResources(costs, data.amount))) {
-      await this.resourceService.updateResources(userId, multiplyResources(costs, data.amount * -1));
+      await this.resourceService.addResources(userId, multiplyResources(costs, data.amount * -1));
       const buildOrder = this.buildOrderRepository.create({
         ...data,
         user: { id: userId },

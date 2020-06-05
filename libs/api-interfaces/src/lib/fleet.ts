@@ -1,15 +1,17 @@
-enum FleetActionEnum {
+import { User } from './user';
+
+export enum FleetActionEnum {
   ATTACK = 'ATTACK',
   DEFEND = 'DEFEND',
 }
 
 export class Fleet {
   id: string;
-  userId: string;
-  targetUserId: string;
+  user: User;
+  target: User;
   action?: FleetActionEnum;
   flightTime?: number;
-  eta?: number;
+  remainingTime?: number;
   actionTicks?: number;
   returning?: boolean;
 }

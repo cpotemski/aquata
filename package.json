@@ -48,6 +48,7 @@
     "@nestjs/typeorm": "^7.0.0",
     "@nrwl/angular": "9.2.3",
     "core-js": "^2.5.4",
+    "lodash": "^4.17.15",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

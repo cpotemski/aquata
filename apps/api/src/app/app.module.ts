@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SeedModule } from '../seed/seed.module';
 import { TickModule } from '../tick/tick.module';
 import { BuildModule } from '../build/build.module';
+import { FleetModule } from '../fleet/fleet.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BuildModule } from '../build/build.module';
     StationModule,
     SeedModule,
     BuildModule,
+    FleetModule,
     TickModule
   ],
   controllers: [AppController]

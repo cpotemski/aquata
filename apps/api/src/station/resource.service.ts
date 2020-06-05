@@ -4,7 +4,7 @@ import { StationEntity } from './station.entity';
 import { Repository } from 'typeorm';
 import { Resources, Station } from '@aquata/api-interfaces';
 import { MyLoggerService } from '../logger/logger.service';
-import { addResources, resourcesNegative } from '@aquata/helper';
+import { addResources, enoughResources, multiplyResources } from '@aquata/helper';
 
 @Injectable()
 export class ResourceService {
@@ -15,23 +15,23 @@ export class ResourceService {
   ) {
   }
 
-  async updateResources(userId: string, resources: Resources): Promise<Station> {
-    const station = await this.stationRepository.findOne({ user: { id: userId } });
-
-    station.resources = addResources(station.resources, resources);
-
-    if (resourcesNegative(station.resources)) {
-      this.logger.warn('negative resources', station, resources);
-      return;
+  async removeResources(userId: string, resources: Partial<Resources>): Promise<Station> {
+    if (this.hasEnoughResources(userId, resources)) {
+      return this.addResources(userId, multiplyResources(resources, -1));
     }
-
-    return this.stationRepository.save(station)
   }
 
-  async hasEnoughResources(userId: string, resources: Resources): Promise<boolean> {
+  async addResources(userId: string, resources: Partial<Resources>): Promise<Station> {
+    const station = await this.stationRepository.findOne({ user: { id: userId } });
+    station.resources = addResources(station.resources, resources);
+
+    return this.stationRepository.save(station);
+  }
+
+  async hasEnoughResources(userId: string, resources: Partial<Resources>): Promise<boolean> {
     const station = await this.stationRepository.findOne({ user: { id: userId } });
 
-    return station && !resourcesNegative(addResources(station.resources, resources));
+    return station && enoughResources(station.resources, resources);
   }
 
 

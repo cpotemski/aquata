@@ -4,6 +4,7 @@ import { StationService } from '../station/station.service';
 import { Injectable } from '@nestjs/common';
 import { MyLoggerService } from '../logger/logger.service';
 import { BuildService } from '../build/build.service';
+import { FleetService } from '../fleet/fleet.service';
 
 @Injectable()
 export class TickService {
@@ -13,6 +14,7 @@ export class TickService {
     private readonly logger: MyLoggerService,
     private readonly stationService: StationService,
     private readonly buildService: BuildService,
+    private readonly fleetService: FleetService
   ) {
   }
 
@@ -56,11 +58,13 @@ export class TickService {
   private async gatherData(): Promise<TickData> {
     const stations = await this.stationService.getStationList();
     const buildOrders = await this.buildService.getBuildOrders();
+    const fleets = await this.fleetService.getFleets();
 
     return {
       stations,
       buildOrders,
-      finishedBuildOrders: []
+      finishedBuildOrders: [],
+      fleets,
     };
   }
 
@@ -68,5 +72,6 @@ export class TickService {
     await this.stationService.save(tickData.stations);
     await this.buildService.save(tickData.buildOrders);
     await this.buildService.delete(tickData.finishedBuildOrders);
+    await this.fleetService.save(tickData.fleets);
   }
 }
