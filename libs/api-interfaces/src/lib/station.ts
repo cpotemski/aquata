@@ -1,5 +1,6 @@
 import { MapCoordinates } from './map';
 import { User } from './user';
+import { Ships } from './fleet';
 
 export class Station {
   id: string;
@@ -7,6 +8,7 @@ export class Station {
   name: String;
   coordinates: MapCoordinates;
   resources: Resources;
+  ships: Ships;
 }
 
 export class CreateStationDto {
@@ -15,10 +17,10 @@ export class CreateStationDto {
 }
 
 export class Resources {
-  aluminium: number;
-  steel: number;
-  plutonium: number;
-  energy: number;
+  aluminium?: number;
+  steel?: number;
+  plutonium?: number;
+  energy?: number;
 }
 
 

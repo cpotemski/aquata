@@ -5,16 +5,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StationEntity } from './station.entity';
 import { MapCoordinatesEntity } from '../helper/map-coordinates.entity';
 import { COORDINATES_MAX_X, COORDINATES_MAX_Y } from '@aquata/constants';
+import { GenericService } from '../../../../libs/helper/src/lib/generic';
+import { MyLoggerService } from '../logger/logger.service';
 
 @Injectable()
-export class StationService {
+export class StationService extends GenericService<StationEntity> {
   constructor(
     @InjectRepository(StationEntity)
     private readonly stationRepository: Repository<StationEntity>,
-  ) {}
+    logger: MyLoggerService
+  ) {
+    super(stationRepository, logger);
+  }
 
   findByUserId(userId: string): Promise<StationEntity | undefined> {
-    return this.stationRepository.findOne({ user: { id: userId }});
+    return this.stationRepository.findOne({ user: { id: userId } });
   }
 
   findByCoordinates(coordinates: MapCoordinatesEntity): Promise<StationEntity | undefined> {
@@ -30,7 +35,7 @@ export class StationService {
       coordinates = {
         x: Math.ceil(Math.random() * COORDINATES_MAX_X),
         y: Math.ceil(Math.random() * COORDINATES_MAX_Y)
-      }
+      };
     } while (await this.findByCoordinates(coordinates));
 
     const station = this.stationRepository.create({
@@ -39,17 +44,5 @@ export class StationService {
     });
 
     return this.stationRepository.save(station);
-  }
-
-  async getStationList(): Promise<StationEntity[]> {
-    return this.stationRepository.find({ relations: ['user']});
-  }
-
-  async deleteAll() {
-    return this.stationRepository.delete({});
-  }
-
-  async save(stations: StationEntity[]) {
-    return this.stationRepository.save(stations);
   }
 }

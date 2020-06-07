@@ -56,15 +56,15 @@ export class TickService {
   }
 
   private async gatherData(): Promise<TickData> {
-    const stations = await this.stationService.getStationList();
-    const buildOrders = await this.buildService.getBuildOrders();
-    const fleets = await this.fleetService.getFleets();
+    const stations = await this.stationService.getAll(['user']);
+    const buildOrders = await this.buildService.getAll(['user']);
+    const fleets = await this.fleetService.getAll(['user']);
 
     return {
       stations,
       buildOrders,
       finishedBuildOrders: [],
-      fleets,
+      fleets
     };
   }
 

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StationEntity } from './station.entity';
 import { Repository } from 'typeorm';
-import { Resources, Station } from '@aquata/api-interfaces';
+import { Resources } from '@aquata/api-interfaces';
 import { MyLoggerService } from '../logger/logger.service';
-import { addResources, enoughResources, multiplyResources } from '@aquata/helper';
+import { add, enoughResources, multiply } from '@aquata/helper';
 
 @Injectable()
 export class ResourceService {
@@ -15,20 +15,20 @@ export class ResourceService {
   ) {
   }
 
-  async removeResources(userId: string, resources: Partial<Resources>): Promise<Station> {
+  async removeResources(userId: string, resources: Resources): Promise<StationEntity> {
     if (this.hasEnoughResources(userId, resources)) {
-      return this.addResources(userId, multiplyResources(resources, -1));
+      return this.addResources(userId, multiply(resources, -1));
     }
   }
 
-  async addResources(userId: string, resources: Partial<Resources>): Promise<Station> {
+  async addResources(userId: string, resources: Resources): Promise<StationEntity> {
     const station = await this.stationRepository.findOne({ user: { id: userId } });
-    station.resources = addResources(station.resources, resources);
+    station.resources = add(station.resources, resources);
 
     return this.stationRepository.save(station);
   }
 
-  async hasEnoughResources(userId: string, resources: Partial<Resources>): Promise<boolean> {
+  async hasEnoughResources(userId: string, resources: Resources): Promise<boolean> {
     const station = await this.stationRepository.findOne({ user: { id: userId } });
 
     return station && enoughResources(station.resources, resources);

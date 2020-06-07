@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from './user.entity';
-import { CreateUserDto, User } from '@aquata/api-interfaces';
+import { CreateUserDto } from '@aquata/api-interfaces';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GenericService } from '@aquata/helper';
+import { MyLoggerService } from '../logger/logger.service';
 
 @Injectable()
-export class UserService {
+export class UserService extends GenericService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>,
+    logger: MyLoggerService
   ) {
+    super(userRepository, logger);
   }
 
   findByEmail(email: string): Promise<UserEntity | undefined> {
     return this.userRepository.findOne({ email });
-  }
-
-  findById(id: string): Promise<UserEntity | undefined> {
-    return this.userRepository.findOne({ id });
   }
 
   async create(data: CreateUserDto): Promise<UserEntity> {
@@ -26,15 +26,8 @@ export class UserService {
       throw Error('A user with this email already exists!');
     }
 
+    //TODO: crypt user password
     const user = this.userRepository.create(data);
     return this.userRepository.save(user);
-  }
-
-  getUserList(): Promise<User[]> {
-    return this.userRepository.find({ select: ['id', 'name'] });
-  }
-
-  async deleteAll() {
-    return this.userRepository.delete({});
   }
 }

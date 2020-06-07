@@ -8,9 +8,10 @@ import { StationModule } from '../station/station.module';
 import { STAGES } from '@aquata/constants';
 import { BuildService } from '../build/build.service';
 import { BuildModule } from '../build/build.module';
-import { BuildOrderType, FleetActionEnum } from '@aquata/api-interfaces';
+import { FleetActionEnum } from '@aquata/api-interfaces';
 import { FleetService } from '../fleet/fleet.service';
 import { FleetModule } from '../fleet/fleet.module';
+import { ResourceService } from '../station/resource.service';
 
 @Module({
   imports: [RegistrationModule, UserModule, StationModule, BuildModule, FleetModule],
@@ -24,7 +25,8 @@ export class SeedModule {
     private readonly userService: UserService,
     private readonly stationService: StationService,
     private readonly buildService: BuildService,
-    private readonly fleetService: FleetService
+    private readonly fleetService: FleetService,
+    private readonly resourceService: ResourceService,
   ) {
     this.seed();
   }
@@ -43,6 +45,10 @@ export class SeedModule {
       stationName: 'Hamburg'
     });
 
+    await this.resourceService.addResources(armaId, {
+      aluminium: 10000,
+    });
+
     const tiroId = await this.registrationService.register({
       email: 'e.mail@hamburg.de',
       password: 'tiro',
@@ -51,12 +57,14 @@ export class SeedModule {
     });
 
     await this.buildService.create(armaId, {
-      type: BuildOrderType.SHIP,
-      what: 'piranha',
-      amount: 1
+      piranha: 1
     });
 
     const armaFleet = await this.fleetService.create(armaId);
+    await this.fleetService.addShips(armaFleet.id, {
+      jellyfish: 123,
+      shark: 19
+    });
     await this.fleetService.startFleet(armaId, armaFleet.id, tiroId, FleetActionEnum.DEFEND, 6);
     await this.fleetService.create(tiroId);
   }

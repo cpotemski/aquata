@@ -1,7 +1,7 @@
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { StationService } from './station.service';
-import { Station } from '@aquata/api-interfaces';
+import { StationEntity } from './station.entity';
 
 @Controller('station')
 export class StationController {
@@ -12,7 +12,7 @@ export class StationController {
 
   @UseGuards(JwtAuthGuard)
   @Get('')
-  getStation(@Request() req): Promise<Station[]> {
-    return this.stationService.getStationList();
+  getStation(@Request() req): Promise<StationEntity[]> {
+    return this.stationService.getAll();
   }
 }

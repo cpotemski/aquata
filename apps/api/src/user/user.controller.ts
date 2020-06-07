@@ -12,6 +12,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('')
   getUser(@Request() req): Promise<User[]> {
-    return this.userService.getUserList();
+    return this.userService.getAll();
   }
 }

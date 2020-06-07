@@ -1,5 +1,5 @@
 import { TickData, TickElement } from '../tick';
-import { addResources } from '@aquata/helper';
+import { add } from '@aquata/helper';
 
 export class ResourceIncomeTick implements TickElement {
   name = 'resources';
@@ -8,7 +8,7 @@ export class ResourceIncomeTick implements TickElement {
     const updatedStations = stations.map(station => {
 
       //TODO: Calculate income for station
-      station.resources = addResources(station.resources, {
+      station.resources = add(station.resources, {
         aluminium: Math.floor(Math.random() * 1000),
         steel: Math.floor(Math.random() * 1000),
         plutonium: Math.floor(Math.random() * 1000),

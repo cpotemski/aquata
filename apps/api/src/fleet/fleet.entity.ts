@@ -1,7 +1,8 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../helper/base.entity';
 import { UserEntity } from '../user/user.entity';
-import { User } from '@aquata/api-interfaces';
+import { ShipsEntity } from './ships.entity';
+import { Ships } from '@aquata/api-interfaces';
 
 @Entity({ name: 'fleet' })
 export class FleetEntity extends BaseEntity {
@@ -9,10 +10,13 @@ export class FleetEntity extends BaseEntity {
   user: UserEntity;
 
   @ManyToOne(type => UserEntity)
-  target: User;
+  target: UserEntity;
 
   @Column({ nullable: true })
   action: string;
+
+  @Column({ default: false })
+  baseFleet: boolean;
 
   @Column({ nullable: true })
   travelTime: number;
@@ -25,4 +29,7 @@ export class FleetEntity extends BaseEntity {
 
   @Column({ nullable: true })
   returning: boolean;
+
+  @Column(type => ShipsEntity)
+  ships: Ships;
 }

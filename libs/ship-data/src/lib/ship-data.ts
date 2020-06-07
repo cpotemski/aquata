@@ -9,7 +9,7 @@ export enum ShipType {
 export class Ship {
   name: string;
   type: ShipType;
-  costs: Resources;
+  costs: Partial<Resources>;
   speed: number;
   travelCosts: number;
   health: number;
@@ -18,15 +18,13 @@ export class Ship {
   buildTime: number;
 }
 
+//TODO: copy correct values for remaining ships from old game
 export const ships: Ship[] = [
   {
     name: 'piranha',
     type: ShipType.FIRSTSTRIKE,
     costs: {
       aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
     },
     speed: 5,
     travelCosts: 3,
@@ -39,10 +37,7 @@ export const ships: Ship[] = [
     name: 'jellyfish',
     type: ShipType.EMP,
     costs: {
-      aluminium: 0,
       steel: 1250,
-      plutonium: 0,
-      energy: 0
     },
     speed: 5,
     travelCosts: 2,
@@ -51,127 +46,110 @@ export const ships: Ship[] = [
     firePower: 0,
     buildTime: 4
   },
-  //TODO: copy correct values for remaining ships from old game
   {
     name: 'shark',
     type: ShipType.NORMAL,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 2000,
+      steel: 1000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 8
   },
   {
     name: 'hackboat',
     type: ShipType.NORMAL,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 2000,
+      steel: 750,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 12
   },
   {
     name: 'taifun',
     type: ShipType.NORMAL,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 6750,
+      steel: 2000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 9
   },
   {
     name: 'blizzard',
     type: ShipType.EMP,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 2000,
+      steel: 8000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 12
   },
   {
     name: 'hurricane',
     type: ShipType.FIRSTSTRIKE,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 10000,
+      steel: 3000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 12
   },
   {
     name: 'tsunami',
     type: ShipType.NORMAL,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 12000,
+      steel: 4000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 16
   },
   {
     name: 'enterprise',
     type: ShipType.NORMAL,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 24000,
+      steel: 6000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 20
   },
   {
     name: 'bermuda',
     type: ShipType.EMP,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 14000,
+      steel: 12000,
     },
     speed: 5,
     travelCosts: 3,
@@ -184,32 +162,28 @@ export const ships: Ship[] = [
     name: 'kittyhawk',
     type: ShipType.FIRSTSTRIKE,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 36000,
+      steel: 9000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 20
   },
   {
     name: 'atlantis',
     type: ShipType.NORMAL,
     costs: {
-      aluminium: 1250,
-      steel: 0,
-      plutonium: 0,
-      energy: 0
+      aluminium: 70000,
+      steel: 16000,
     },
     speed: 5,
     travelCosts: 3,
     health: 3,
     cannons: 1,
     firePower: 2,
-    buildTime: 4
+    buildTime: 24
   },
 ];
