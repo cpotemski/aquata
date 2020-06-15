@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StationEntity } from './station.entity';
 import { MapCoordinatesEntity } from '../helper/map-coordinates.entity';
 import { COORDINATES_MAX_X, COORDINATES_MAX_Y } from '@aquata/constants';
-import { GenericService } from '../../../../libs/helper/src/lib/generic';
+import { GenericService } from '../helper/generic';
 import { MyLoggerService } from '../logger/logger.service';
 
 @Injectable()

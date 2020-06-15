@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { MyLoggerService } from '../../../../apps/api/src/logger/logger.service';
+import { MyLoggerService } from '../logger/logger.service';
 
 export class GenericService<T> {
   constructor(

@@ -1,0 +1,79 @@
+@import "../variables";
+
+.content {
+  width: 100%;
+  height: 100%;
+  background: map_get($colors, primary);
+}
+
+.footer {
+  background: map_get($colors, font);
+  z-index: map_get($indices, footer);
+  box-shadow: $shadowHover;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+
+  display: flex;
+  justify-content: space-around;
+
+  & > div {
+    font-size: 30px;
+    line-height: 50px;
+  }
+}
+
+.navigation {
+  z-index: map_get($indices, navigation);
+  position: fixed;
+  top: calc(50% - 50px);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: map_get($colors, font);
+    border: 1px solid black;
+    border-radius: $border-radius;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 30px;
+    padding: 0 8px;
+    box-sizing: border-box;
+
+    &:hover {
+      box-shadow: $shadowLight;
+    }
+
+    &:not(:first-child) {
+      margin-top: 24px;
+    }
+  }
+
+  &.left {
+    left: 0;
+
+    .item {
+      border-left: none;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  &.right {
+    right: 0;
+    align-items: flex-end;
+
+    .item {
+      border-right: none;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}

@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import "variables";
+@import "icofont.css";
+
+html {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: map-get($colors, font);
+  margin: 0;
+  color: map-get($colors, primary);
+  height: 100%;
+}

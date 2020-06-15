@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { MyLoggerService } from '../logger/logger.service';
 import { FleetEntity } from './fleet.entity';
 import { FleetActionEnum, MoveShipsDto, Ships } from '@aquata/api-interfaces';
 import { StationService } from '../station/station.service';
-import { add, GenericService, getMapDistance, isNegative, substract, userIsOwner } from '@aquata/helper';
+import { add, getMapDistance, isNegative, substract, userIsOwner } from '@aquata/helper';
 import { ResourceService } from '../station/resource.service';
+import { GenericService } from '../helper/generic';
 
 
 @Injectable()
@@ -21,8 +22,8 @@ export class FleetService extends GenericService<FleetEntity> {
     super(fleetRepository, logger);
   }
 
-  async create(userId: string, data?: DeepPartial<FleetEntity>, baseFleet: boolean = false): Promise<FleetEntity> {
-    const fleet = this.fleetRepository.create({ user: { id: userId }, ...data, baseFleet });
+  async create(userId: string, baseFleet: boolean = false): Promise<FleetEntity> {
+    const fleet = this.fleetRepository.create({ user: { id: userId }, baseFleet });
     return this.fleetRepository.save(fleet);
   }
 
@@ -59,7 +60,6 @@ export class FleetService extends GenericService<FleetEntity> {
           returning: false
         });
       }
-
     }
   }
 

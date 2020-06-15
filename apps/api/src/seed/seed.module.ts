@@ -68,7 +68,7 @@ export class SeedModule {
       piranha: 1
     });
 
-    await this.fleetService.create(armaId, null, true);
+    await this.fleetService.create(armaId, true);
     const armaFleet = await this.fleetService.create(armaId);
     await this.fleetService.addShips(armaFleet.id, {
       piranha: 99,
@@ -77,7 +77,7 @@ export class SeedModule {
     });
     await this.fleetService.startFleet(armaId, armaFleet.id, tiroId, FleetActionEnum.ATTACK, 3);
 
-    const tiroFleet = await this.fleetService.create(tiroId, null, true);
+    const tiroFleet = await this.fleetService.create(tiroId, true);
     await this.fleetService.addShips(tiroFleet.id, {
       piranha: 100,
       jellyfish: 22

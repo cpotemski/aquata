@@ -1,7 +1,17 @@
-<h1>Dashboard</h1>
-
-Stations
-<div *ngFor="let station of stations$ | async">{{station.user.name}} von {{station.name}} ({{station.coordinates.x}}:{{station.coordinates.y}})</div>
-<br/>
-BuildOrders
-<div *ngFor="let order of buildOrders$ | async">{{order.amount}} {{order.what}} noch {{order.remainingTime}} Ticks verbleibend</div>
+<div class="content">
+</div>
+<div class="navigation left">
+  <div class="item"><i class="icofont-award"></i></div>
+  <div class="item"><i class="icofont-test-tube-alt"></i></div>
+  <div class="item"><i class="icofont-mining"></i></div>
+</div>
+<div class="navigation right">
+  <div class="item"><i class="icofont-help-robot"></i></div>
+  <div class="item"><i class="icofont-space-shuttle"></i></div>
+  <div class="item"><i class="icofont-map"></i></div>
+</div>
+<div class="footer">
+  <div><i class="icofont-ui-message"></i></div>
+  <div><i class="icofont-spinner-alt-4"></i></div>
+  <div><i class="icofont-user"></i></div>
+</div>

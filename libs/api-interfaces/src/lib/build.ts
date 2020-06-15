@@ -1,5 +1,3 @@
-import { Ships } from './fleet';
-
 export class BuildOrder {
   type: string;
   amount: number;

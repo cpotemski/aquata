@@ -1,0 +1,21 @@
+$colors: (
+  primary: #0C4767,
+  //secondary: #
+  shadow: #4A525A,
+  font: #FDFFFC,
+  alert: #A4243B,
+  warning: #F6AE2D,
+  success: #6C7D47,
+);
+
+$indices: (
+  footer: 10,
+  navigation: 10,
+);
+
+$shadow: 2px 2px 5px transparentize(map-get($colors, primary), 0.4);
+$shadowHover: 2px 2px 6px 3px map-get($colors, primary);
+
+$shadowLight: 0 0 4px 2px map-get($colors, font);
+
+$border-radius: 4px;
