@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { BuildOrderType, Ships } from '@aquata/api-interfaces';
 import { ResourceService } from '../station/resource.service';
 import { MyLoggerService } from '../logger/logger.service';
-import { Ship, ships } from '@aquata/ship-data';
+import { Ship, shipData } from '@aquata/ship-data';
 import { GenericService, multiply } from '@aquata/helper';
 
 
@@ -27,7 +27,7 @@ export class BuildService extends GenericService<BuildOrderEntity> {
   async create(userId: string, order: Ships): Promise<BuildOrderEntity[]> {
     const orderPromises = Object.keys(order).map(async ship => {
       const amount = order[ship];
-      const shipToBuild: Ship = ships.find(s => s.name === ship);
+      const shipToBuild: Ship = shipData.find(s => s.name === ship);
       if (shipToBuild) {
         const costs = multiply(shipToBuild.costs, amount);
         const buildTime = shipToBuild.buildTime;

@@ -1,5 +1,6 @@
 import { TickData, TickElement } from '../tick';
 import { partition } from 'lodash';
+import { resetFleet } from '@aquata/helper';
 
 export class FleetMovementTick implements TickElement {
   name = 'fleetMovement';
@@ -10,12 +11,7 @@ export class FleetMovementTick implements TickElement {
       fleet.remainingTime -= 1;
 
       if (fleet.returning && fleet.remainingTime === 0) {
-        fleet.travelTime = null;
-        fleet.returning = null;
-        fleet.actionTicks = null;
-        fleet.action = null;
-        fleet.target = null;
-        fleet.remainingTime = null;
+        resetFleet(fleet);
       }
 
       return fleet;

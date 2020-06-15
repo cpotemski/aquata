@@ -9,8 +9,8 @@ export class Fleet {
   id: string;
   user: User;
   target: User;
-  action?: FleetActionEnum;
-  flightTime?: number;
+  action?: string;
+  travelTime?: number;
   remainingTime?: number;
   actionTicks?: number;
   returning?: boolean;

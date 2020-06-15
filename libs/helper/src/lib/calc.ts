@@ -1,5 +1,3 @@
-import { Resources } from '@aquata/api-interfaces';
-
 export const add = <T>(a: T, b: T): T => {
   const c = Object.assign({}, a);
   Object.keys(b).forEach(key => {
@@ -26,10 +24,17 @@ export const substract = <T>(a: T, b: T): T => {
   return c;
 };
 
-export const multiply = <T>(obj: T, multiplier: number): T => {
+export const multiplyAndCeil = <T>(obj: T, multiplier: number): T => multiply(obj, multiplier, Math.ceil);
+
+
+export const multiply = <T>(obj: T, multiplier: number, roundingFunction?: (number) => number): T => {
   const b = {};
   Object.keys(obj).forEach(key => {
-    b[key] = obj[key] * multiplier;
+    if (roundingFunction) {
+      b[key] = roundingFunction(obj[key] * multiplier);
+    } else {
+      b[key] = obj[key] * multiplier;
+    }
   });
 
   return b as T;

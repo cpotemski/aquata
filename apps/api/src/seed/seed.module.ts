@@ -26,7 +26,7 @@ export class SeedModule {
     private readonly stationService: StationService,
     private readonly buildService: BuildService,
     private readonly fleetService: FleetService,
-    private readonly resourceService: ResourceService,
+    private readonly resourceService: ResourceService
   ) {
     this.seed();
   }
@@ -47,6 +47,7 @@ export class SeedModule {
 
     await this.resourceService.addResources(armaId, {
       aluminium: 10000,
+      plutonium: 10000
     });
 
     const tiroId = await this.registrationService.register({
@@ -56,17 +57,38 @@ export class SeedModule {
       stationName: 'da wo´s Chaos herrscht'
     });
 
+    const botId = await this.registrationService.register({
+      email: 'bot@aquata.online',
+      password: 'bot',
+      userName: 'Bot',
+      stationName: 'Aquata'
+    });
+
     await this.buildService.create(armaId, {
       piranha: 1
     });
 
+    await this.fleetService.create(armaId, null, true);
     const armaFleet = await this.fleetService.create(armaId);
     await this.fleetService.addShips(armaFleet.id, {
+      piranha: 99,
       jellyfish: 123,
       shark: 19
     });
-    await this.fleetService.startFleet(armaId, armaFleet.id, tiroId, FleetActionEnum.DEFEND, 6);
-    await this.fleetService.create(tiroId);
+    await this.fleetService.startFleet(armaId, armaFleet.id, tiroId, FleetActionEnum.ATTACK, 3);
+
+    const tiroFleet = await this.fleetService.create(tiroId, null, true);
+    await this.fleetService.addShips(tiroFleet.id, {
+      piranha: 100,
+      jellyfish: 22
+    });
+
+    const botFleet = await this.fleetService.create(botId);
+    await this.fleetService.addShips(botFleet.id, {
+      hackboat: 50,
+      shark: 5
+    });
+    await this.fleetService.startFleet(botId, botFleet.id, tiroId, FleetActionEnum.DEFEND, 6);
   }
 
   async localSeed() {

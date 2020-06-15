@@ -1,4 +1,5 @@
 export * from './lib/calc';
+export * from './lib/fleet';
 export * from './lib/generic';
 export * from './lib/map';
 export * from './lib/resources';

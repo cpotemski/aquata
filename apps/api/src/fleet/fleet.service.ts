@@ -38,7 +38,11 @@ export class FleetService extends GenericService<FleetEntity> {
       //TODO: calculate speed of fleet
       const speed = 3;
 
-      const travelTime = Math.ceil(distance / speed);
+      let travelTime = Math.ceil(distance / speed);
+      if (fleet.action === FleetActionEnum.ATTACK) {
+        //TODO: attack malus?
+        travelTime += 1;
+      }
 
       //TODO: calculate costs to start fleet
       const flightCosts = 100;
