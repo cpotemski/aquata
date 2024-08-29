@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Don't forget to tell Prisma about your edits to this file using
+// `yarn rw prisma migrate dev` or `yarn rw prisma db push`.
+// `migrate` is like committing while `push` is for prototyping.
+// Read more about both here:
+// https://www.prisma.io/docs/orm/prisma-migrate
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // binaryTargets = "native"
+}
+
+generator zod {
+  provider = "zod-prisma-types"
+}
+
+// Define your own datamodels here and run `yarn redwood prisma migrate dev`
+// to create migrations for them and apply to your dev DB.
+model User {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+
+  role Role @default(USER)
+
+  name           String       @unique
+  station        Station?
+  fleets         Fleet[]      @relation("ownerRelation")
+  incomingFleets Fleet[]      @relation("targetRelation")
+  buildOrders    BuildOrder[]
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+model Station {
+  id            String     @id @default(uuid())
+  name          String     @unique
+  owner         User       @relation(fields: [ownerId], references: [id])
+  ownerId       String     @unique
+  resources     Resource   @relation(fields: [resourcesId], references: [id])
+  resourcesId   String     @unique
+  coordinates   Coordinate @relation(fields: [coordinatesId], references: [id])
+  coordinatesId String     @unique
+  harvesters    Int        @default(10)
+  distribution  Int[]      @default([50, 30])
+}
+
+model Fleet {
+  id            String           @id @default(uuid())
+  owner         User             @relation("ownerRelation", fields: [ownerId], references: [id])
+  ownerId       String
+  target        User?            @relation("targetRelation", fields: [targetId], references: [id])
+  targetId      String?
+  baseFleet     Boolean          @default(false)
+  ships         ShipGroup[]
+  resources     Resource         @relation(fields: [resourcesId], references: [id])
+  resourcesId   String           @unique
+  travelTime    Int?
+  remainingTime Int?
+  action        FleetActionType?
+  actionTime    Int?
+  returning     Boolean?
+}
+
+model ShipGroup {
+  id      String   @id @default(uuid())
+  fleet   Fleet    @relation(fields: [fleetId], references: [id])
+  fleetId String
+  type    ShipType
+  amount  Int
+
+  @@unique([fleetId, type])
+}
+
+model Resource {
+  id        String   @id @default(uuid())
+  aluminium Int      @default(0)
+  steel     Int      @default(0)
+  plutonium Int      @default(0)
+  station   Station?
+  fleet     Fleet?
+}
+
+model ResourceNode {
+  id            String       @id @default(uuid())
+  type          ResourceType
+  coordinates   Coordinate   @relation(fields: [coordinatesId], references: [id])
+  coordinatesId String       @unique
+}
+
+model Coordinate {
+  id           String        @id @default(uuid())
+  x            Int
+  y            Int
+  station      Station?
+  resourceNode ResourceNode?
+
+  @@unique([x, y])
+}
+
+model BuildOrder {
+  id            String         @id @default(uuid())
+  owner         User           @relation(fields: [ownerId], references: [id])
+  ownerId       String
+  type          BuildOrderType
+  what          ShipType
+  amount        Int
+  remainingTime Int
+}
+
+// enums
+
+enum ResourceType {
+  Aluminium
+  Steel
+  Plutonium
+}
+
+enum ShipType {
+  Piranha
+  Jellyfish
+  Shark
+  HackBoat
+  Taifun
+  Blizzard
+  Hurricane
+  Tsunami
+  Enterprise
+  Bermuda
+  KittyHawk
+  Atlantis
+}
+
+enum FightType {
+  Normal
+  Emp
+  FirstStrike
+}
+
+enum BuildOrderType {
+  Ship
+  Harvester
+}
+
+enum FleetActionType {
+  Attack
+  Defend
+}
