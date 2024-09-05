@@ -1,12 +1,12 @@
-import { auth, signIn } from "@/auth"
-import { db } from "@/lib/db"
+import { signIn, signOut } from "@/auth"
 import { register } from "@/lib/auth/register"
 import { redirect } from "next/navigation"
+import { getUser } from "@/lib/auth/getUser"
 
 export default async function Home() {
-  const session = await auth()
+  const user = await getUser()
 
-  if (!session?.user?.id) {
+  if (!user) {
     // not logged in
     return <main>
       <h1>du bist nicht eingeloggt</h1>
@@ -20,11 +20,9 @@ export default async function Home() {
       </form>
     </main>
   }
-  //you are logged in
 
-  const user = await db.user.findFirst({ where: { id: session.user.id } })
-  console.log(user, session)
-  if (!user) {
+  //you are logged in
+  if (!user.station) {
     // did not finish registration
     return <main>
       <h1>We need some more information from you</h1>
@@ -42,6 +40,15 @@ export default async function Home() {
           // more to come
         }
         <button type="submit">Speichern</button>
+      </form>
+
+      <form
+        action={async () => {
+          "use server"
+          await signOut()
+        }}
+      >
+        <button type="submit">Logout</button>
       </form>
     </main>
   }

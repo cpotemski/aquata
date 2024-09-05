@@ -25,7 +25,7 @@ export const register = async (formData: FormData) => {
 
   const defaultValues = await getUserDefaults(stationname)
 
-  await db.user.create({ data: { id, email, name: username, ...defaultValues } })
+  await db.user.update({ where: {id}, data: { name: username, ...defaultValues } })
 
   redirect("/game")
 }

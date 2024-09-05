@@ -1,15 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// Don't forget to tell Prisma about your edits to this file using
-// `yarn rw prisma migrate dev` or `yarn rw prisma db push`.
-// `migrate` is like committing while `push` is for prototyping.
-// Read more about both here:
-// https://www.prisma.io/docs/orm/prisma-migrate
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -17,29 +5,69 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  // binaryTargets = "native"
 }
 
 generator zod {
   provider = "zod-prisma-types"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
 model User {
-  id        String   @id
+  id            String    @id @default(cuid())
+  name          String    @unique
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String @unique
-
   role Role @default(USER)
 
-  name           String       @unique
   station        Station?
   fleets         Fleet[]      @relation("ownerRelation")
   incomingFleets Fleet[]      @relation("targetRelation")
   buildOrders    BuildOrder[]
+  Account        Account[]
+  Session        Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
 }
 
 enum Role {

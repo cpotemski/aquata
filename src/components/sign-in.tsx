@@ -1,4 +1,4 @@
-import { auth, signIn } from "@/auth"
+import { auth, signIn, signOut } from "@/auth"
 
 export default async function SignIn() {
   const session = await auth()
@@ -10,7 +10,7 @@ export default async function SignIn() {
         <form
           action={async () => {
             "use server"
-            await signIn("auth0")
+            await signOut()
           }}
         >
           <button type="submit">Signout</button>

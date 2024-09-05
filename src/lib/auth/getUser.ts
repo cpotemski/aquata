@@ -2,12 +2,12 @@ import { auth } from "@/auth"
 import { db } from "@/lib/db"
 import { redirect } from "next/navigation"
 
-export const useUser = async () => {
+export const getUser = async () => {
   const session = await auth()
   if (!session?.user?.id) {
     redirect("/")
   }
-  const user = await db.user.findFirst({ where: { id: session.user.id } })
+  const user = await db.user.findUniqueOrThrow({ where: { id: session.user.id }, include: {station: true} })
   if (!user) {
     redirect("/")
   }
