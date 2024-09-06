@@ -1,23 +1,17 @@
-import { getUser } from "@/lib/auth/getUser"
-import { db } from "@/lib/db"
 import ResourceIncrementButton from "@/components/resourceIncrementButton"
-import { incrementResourceAction } from "@/game/resource/incrementResource"
+import Resources from "@/components/resources"
+import { HydrateClient } from "@/trpc/server"
 
 export default async function Game() {
-  const user = await getUser()
-  const resources = await db.resource.findUniqueOrThrow({ where: { id: user.station?.resourcesId } })
 
   return (
-    <main>
-      <h1>You are in game {user.name}</h1>
-      <div>
-        Aluminium: {resources.aluminium}
-        Stahl: {resources.steel}
-        Plutonium: {resources.plutonium}
-      </div>
+    <HydrateClient>
+      <main>
+        <h1>You are in game</h1>
+        <Resources />
 
-      <ResourceIncrementButton incrementResourceAction={incrementResourceAction} />
-    </main>
-
+        <ResourceIncrementButton />
+      </main>
+    </HydrateClient>
   )
 }

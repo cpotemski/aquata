@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionProvider } from "next-auth/react"
+import { TRPCProvider } from "@/trpc/client"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -14,7 +15,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
     <body className={inter.className}>
     <SessionProvider>
-      {children}
+      <TRPCProvider>
+        {children}
+      </TRPCProvider>
     </SessionProvider>
     </body>
     </html>

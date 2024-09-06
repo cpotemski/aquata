@@ -1,12 +1,15 @@
 "use client"
 
-export default function ResourceIncrementButton({
-                                                  incrementResourceAction
-                                                }: {
-  incrementResourceAction: () => void
-}) {
-  return <form action={incrementResourceAction}>
-    <button type="submit">Increment Resources</button>
-  </form>
+import { trpc } from "@/trpc/client"
+
+export default function ResourceIncrementButton() {
+  const utils = trpc.useUtils()
+  const mutation = trpc.incrementResources.useMutation({
+    onSuccess: async () => {
+      await utils.getResources.invalidate()
+    }
+  })
+
+  return <button onClick={() => mutation.mutate()}>Increment Resources</button>
 }
 
