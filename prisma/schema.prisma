@@ -25,10 +25,15 @@ model User {
 
   station        Station?
   fleets         Fleet[]      @relation("ownerRelation")
-  incomingFleets Fleet[]      @relation("targetRelation")
-  buildOrders    BuildOrder[]
+  buildJobs     BuildJob[]
   Account        Account[]
   Session        Session[]
+  notifications Notification[]
+  sentMessages  Message[]
+  chats         Chat[]
+  Commandship   Commandship[]
+  Alliance      Alliance?      @relation(fields: [allianceId], references: [id])
+  allianceId    String?
 }
 
 model Account {
@@ -87,18 +92,23 @@ model Station {
   coordinatesId String     @unique
   harvesters    Int        @default(10)
   distribution  Int[]      @default([50, 30])
+  activeResourceNodes ResourceNode[]
+  fleets              Fleet[]        @relation("fleetsInStation")
+  incomingFleets      Fleet[]        @relation("incomingFleets")
 }
 
 model Fleet {
   id            String           @id @default(uuid())
   owner         User             @relation("ownerRelation", fields: [ownerId], references: [id])
   ownerId       String
-  target        User?            @relation("targetRelation", fields: [targetId], references: [id])
-  targetId      String?
+  inStation     Station?         @relation(name: "fleetsInStation", references: [id], fields: [stationId])
+  stationId     String?
   baseFleet     Boolean          @default(false)
   ships         ShipGroup[]
   resources     Resource         @relation(fields: [resourcesId], references: [id])
   resourcesId   String           @unique
+  target        Station?         @relation(name: "incomingFleets", references: [id], fields: [targetId])
+  targetId      String?
   travelTime    Int?
   remainingTime Int?
   action        FleetActionType?
@@ -130,6 +140,8 @@ model ResourceNode {
   type          ResourceType
   coordinates   Coordinate   @relation(fields: [coordinatesId], references: [id])
   coordinatesId String       @unique
+  Station       Station?     @relation(fields: [stationId], references: [id])
+  stationId     String?
 }
 
 model Coordinate {
@@ -142,14 +154,70 @@ model Coordinate {
   @@unique([x, y])
 }
 
-model BuildOrder {
+model BuildJob {
   id            String         @id @default(uuid())
   owner         User           @relation(fields: [ownerId], references: [id])
   ownerId       String
-  type          BuildOrderType
+  type          BuildJobType
   what          ShipType
   amount        Int
   remainingTime Int
+}
+
+enum NotificationType {
+  INFO
+  ALERT
+}
+
+model Notification {
+  user   User   @relation(references: [id], fields: [userId])
+  userId String
+
+  id      String           @id @default(uuid())
+  type    NotificationType
+  title   String
+  content String
+}
+
+model Commandship {
+  user   User   @relation(references: [id], fields: [userId])
+  userId String
+
+  id         String @id @default(uuid())
+  level      Int    @default(1)
+  experience Int    @default(0)
+}
+
+model Message {
+  user   User   @relation(references: [id], fields: [userId])
+  userId String
+
+  chat   Chat   @relation(references: [id], fields: [chatId])
+  chatId String
+
+  id      String @id @default(uuid())
+  message String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chat {
+  id   String  @id @default(uuid())
+  name String?
+
+  messages Message[]
+  members  User[]
+  public   Boolean
+
+  updatedAt DateTime @updatedAt
+}
+
+model Alliance {
+  id   String @id @default(uuid())
+  name String
+
+  members User[]
 }
 
 // enums
@@ -181,7 +249,7 @@ enum FightType {
   FirstStrike
 }
 
-enum BuildOrderType {
+enum BuildJobType {
   Ship
   Harvester
 }
