@@ -7,9 +7,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator zod {
-  provider = "zod-prisma-types"
-}
+// generator zod {
+//   provider = "zod-prisma-types"
+// }
 
 model User {
   id            String    @id @default(cuid())
@@ -23,11 +23,11 @@ model User {
 
   role Role @default(USER)
 
-  station        Station?
-  fleets         Fleet[]      @relation("ownerRelation")
+  station       Station?
+  fleets        Fleet[]        @relation("ownerRelation")
   buildJobs     BuildJob[]
-  Account        Account[]
-  Session        Session[]
+  Account       Account[]
+  Session       Session[]
   notifications Notification[]
   sentMessages  Message[]
   chats         Chat[]
@@ -82,16 +82,16 @@ enum Role {
 }
 
 model Station {
-  id            String     @id @default(uuid())
-  name          String     @unique
-  owner         User       @relation(fields: [ownerId], references: [id])
-  ownerId       String     @unique
-  resources     Resource   @relation(fields: [resourcesId], references: [id])
-  resourcesId   String     @unique
-  coordinates   Coordinate @relation(fields: [coordinatesId], references: [id])
-  coordinatesId String     @unique
-  harvesters    Int        @default(10)
-  distribution  Int[]      @default([50, 30])
+  id                  String         @id @default(uuid())
+  name                String         @unique
+  owner               User           @relation(fields: [ownerId], references: [id])
+  ownerId             String         @unique
+  resources           Resource       @relation(fields: [resourcesId], references: [id])
+  resourcesId         String         @unique
+  coordinates         Coordinate     @relation(fields: [coordinatesId], references: [id])
+  coordinatesId       String         @unique
+  harvesters          Int            @default(10)
+  distribution        Int[]          @default([50, 30])
   activeResourceNodes ResourceNode[]
   fleets              Fleet[]        @relation("fleetsInStation")
   incomingFleets      Fleet[]        @relation("incomingFleets")
@@ -155,13 +155,15 @@ model Coordinate {
 }
 
 model BuildJob {
-  id            String         @id @default(uuid())
-  owner         User           @relation(fields: [ownerId], references: [id])
+  id            String       @id @default(uuid())
+  owner         User         @relation(fields: [ownerId], references: [id])
   ownerId       String
   type          BuildJobType
   what          ShipType
   amount        Int
   remainingTime Int
+
+  @@unique(fields: [ownerId, type, what, remainingTime], name: "buildJobPerTypeAndTick")
 }
 
 enum NotificationType {

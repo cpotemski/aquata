@@ -1,12 +1,12 @@
-import { auth } from "@/auth"
-import { db } from "@/lib/db"
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
 
 export const isAuthenticated = async () => {
-  const session = await auth()
-  console.log("session", session)
+  const session = await auth();
+  console.log("session", session);
   if (!session?.user?.id) {
-    return false
+    return false;
   }
-  const user = await db.user.findFirst({ where: { id: session.user.id } })
-  return user !== null
-}
+  const user = await db.user.findFirst({ where: { id: session.user.id } });
+  return user !== null;
+};

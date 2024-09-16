@@ -1,10 +1,10 @@
-import { db } from "@/lib/db"
-import { auth } from "@/auth"
-import { z } from "zod"
-import { Prisma } from "@prisma/client"
-import { COORDINATES_MAX_X, COORDINATES_MAX_Y } from "@/lib/config"
-import CoordinateCreateInput = Prisma.CoordinateCreateInput
-import { redirect } from "next/navigation"
+import { db } from "@/lib/db";
+import { auth } from "@/lib//auth";
+import { z } from "zod";
+import { Prisma } from "@prisma/client";
+import { COORDINATES_MAX_X, COORDINATES_MAX_Y } from "@/lib/config";
+import { redirect } from "next/navigation";
+import CoordinateCreateInput = Prisma.CoordinateCreateInput;
 
 const Input = z.object({
   username: z.string(),
